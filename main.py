@@ -4,6 +4,7 @@ from colorama import Fore
 from subdomain_enumeration_engines.virustotal import VirusTotal
 from subdomain_enumeration_engines.dnsdumpster import DNSdumpster
 from subdomain_enumeration_engines.crtsearch import CrtSearch
+from utility.load_list_from_file import load_list_from_file
 
 
 def write_list_to_file(list_of_items, filename):
@@ -59,6 +60,8 @@ if __name__ == '__main__':
     subdomains_set.remove(exclusion)
 
     write_list_to_file(subdomains_set, 'subdomains')
+
+
 
     print(f'{Fore.MAGENTA}Found {subdomains_set.__len__()} subdomains for {target_domain}')
     # =========================================================================================
