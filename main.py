@@ -6,6 +6,7 @@ from subdomain_enumeration_engines.dnsdumpster import DNSdumpster
 from subdomain_enumeration_engines.crtsearch import CrtSearch
 from utility.load_list_from_file import load_list_from_file
 from utility.utils import extract_subs
+from utility.make_http_request import make_http_req
 
 
 def write_list_to_file(list_of_items, filename):
@@ -42,21 +43,27 @@ if __name__ == '__main__':
 
     enum_engine_objects = [engine(target_domain, queue) for engine in enum_engines]
 
+    # run processes
     for enum_engine_object in enum_engine_objects:
         enum_engine_object.start()
 
     for enum_engine_object in enum_engine_objects:
         enum_engine_object.join()
 
+    # holds list of unique subdomains of a given target domain
     subdomains_set = set(extract_subs(queue))
 
     # list of subdomain to be excluded
     exclusion_list = ['www.' + target_domain]
 
+    # remove excluded subdomains from subdomains_set
     for el in exclusion_list:
         subdomains_set.remove(el)
 
+    # Write the final list of subdomains to a file
     write_list_to_file(subdomains_set, 'subdomains')
+
+    make_http_req(subdomains_set)
 
     print(f'{Fore.MAGENTA}Found {subdomains_set.__len__()} subdomains for {target_domain}')
     # =========================================================================================
