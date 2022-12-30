@@ -5,6 +5,7 @@ from subdomain_enumeration_engines.virustotal import VirusTotal
 from subdomain_enumeration_engines.dnsdumpster import DNSdumpster
 from subdomain_enumeration_engines.crtsearch import CrtSearch
 from utility.load_list_from_file import load_list_from_file
+from utility.utils import extract_subs
 
 
 def write_list_to_file(list_of_items, filename):
@@ -47,21 +48,15 @@ if __name__ == '__main__':
     for enum_engine_object in enum_engine_objects:
         enum_engine_object.join()
 
-    for q in range(queue.qsize()):
-        subs = queue.get()
-        for sub in subs:
-            subdomains.append(sub)
-
-    subdomains_set = set(subdomains)
+    subdomains_set = set(extract_subs(queue))
 
     # list of subdomain to be excluded
-    exclusion = 'www.' + target_domain
+    exclusion_list = ['www.' + target_domain]
 
-    subdomains_set.remove(exclusion)
+    for el in exclusion_list:
+        subdomains_set.remove(el)
 
     write_list_to_file(subdomains_set, 'subdomains')
-
-
 
     print(f'{Fore.MAGENTA}Found {subdomains_set.__len__()} subdomains for {target_domain}')
     # =========================================================================================
