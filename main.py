@@ -4,25 +4,7 @@ from colorama import Fore
 from subdomain_enumeration_engines.virustotal import VirusTotal
 from subdomain_enumeration_engines.dnsdumpster import DNSdumpster
 from subdomain_enumeration_engines.crtsearch import CrtSearch
-from utility.load_list_from_file import load_list_from_file
-from utility.utils import extract_subs
-from utility.make_http_request import make_http_req
-
-
-def write_list_to_file(list_of_items, filename):
-    """
-    this funtion will write the list of subdomains enumerated to a file
-    :param list_of_items: list of items to be written to file
-    :param filename: name of the file
-    """
-    if '.txt' not in filename:
-        filename += '.txt'
-    print(f'Writing list to file ----->{filename}')
-    file = open(filename, 'w')
-    for item in list_of_items:
-        file.write(item + '\n')
-    file.close()
-
+from utility.utils import *
 
 if __name__ == '__main__':
     start_time = time.perf_counter()
