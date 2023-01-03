@@ -16,7 +16,7 @@ if __name__ == '__main__':
     subdomains_set = set()
 
     # target to be enumerated
-    target_domain = 'crowdstrike.com'
+    target_domain = 'zomato.com'
 
     queue = multiprocessing.Manager().Queue()
 
@@ -35,17 +35,12 @@ if __name__ == '__main__':
     # holds list of unique subdomains of a given target domain
     subdomains_set = set(extract_subs(queue))
 
-    # list of subdomain to be excluded
-    exclusion_list = ['www.' + target_domain]
-
-    # remove excluded subdomains from subdomains_set
-    for el in exclusion_list:
-        subdomains_set.remove(el)
-
     # Write the final list of subdomains to a file
-    write_list_to_file(subdomains_set, 'subdomains')
+    write_list_to_file(subdomains_set, 'subdomains', os.getcwd())
 
-    make_http_req(subdomains_set)
+    response = make_http_req(subdomains_set)
+
+    write_output(response)
 
     print(f'{Fore.MAGENTA}Found {subdomains_set.__len__()} subdomains for {target_domain}')
     # =========================================================================================
