@@ -6,6 +6,8 @@ from subdomain_enumeration_engines.dnsdumpster import DNSdumpster
 from subdomain_enumeration_engines.crtsearch import CrtSearch
 from utility.utils import *
 
+args = setup_arguments()
+
 if __name__ == '__main__':
     start_time = time.perf_counter()
 
@@ -16,7 +18,7 @@ if __name__ == '__main__':
     subdomains_set = set()
 
     # target to be enumerated
-    target_domain = 'zomato.com'
+    target_domain = args.domain
 
     queue = multiprocessing.Manager().Queue()
 

@@ -1,3 +1,5 @@
+import argparse
+import json
 import os.path
 import threading
 
@@ -71,6 +73,7 @@ def write_output_to_file(path, filename, contents, filetype='txt'):
             os.makedirs(path, exist_ok=True)
 
     file = open(filepath, 'w', encoding='utf-8')
+
     file.write(contents)
     file.close()
 
@@ -150,3 +153,11 @@ def write_output(response):
 
     for t in req_header_thread:
         t.join()
+
+
+def setup_arguments():
+    program_description = 'Adding Description'
+
+    parser = argparse.ArgumentParser(description=program_description)
+    parser.add_argument('-d', '--domain', help='domain name for which subdomains to be enumerated', required=True)
+    return parser.parse_args()
