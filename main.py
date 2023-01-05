@@ -5,10 +5,12 @@ from subdomain_enumeration_engines.virustotal import VirusTotal
 from subdomain_enumeration_engines.dnsdumpster import DNSdumpster
 from subdomain_enumeration_engines.crtsearch import CrtSearch
 from utility.utils import *
+from utility.output_helper import custom_print
 
-args = setup_arguments()
+# args = setup_arguments()
 
 if __name__ == '__main__':
+
     start_time = time.perf_counter()
 
     # this variable holds all enumerate subdomains. (may include duplicates)
@@ -18,7 +20,7 @@ if __name__ == '__main__':
     subdomains_set = set()
 
     # target to be enumerated
-    target_domain = args.domain
+    target_domain = 'zomato.com'
 
     queue = multiprocessing.Manager().Queue()
 
