@@ -1,26 +1,27 @@
 import multiprocessing
 import time
-from colorama import Fore
 from subdomain_enumeration_engines.virustotal import VirusTotal
 from subdomain_enumeration_engines.dnsdumpster import DNSdumpster
 from subdomain_enumeration_engines.crtsearch import CrtSearch
 from utility.utils import *
-from utility.output_helper import custom_print
+from utility.output_helper import *
 
-# args = setup_arguments()
+args = setup_arguments()
 
 if __name__ == '__main__':
 
     start_time = time.perf_counter()
+
+    # target to be enumerated
+    target_domain = args.domain
+
+    print_info(f'Domain Set -----> {target_domain}\n')
 
     # this variable holds all enumerate subdomains. (may include duplicates)
     subdomains = []
 
     # this variable holds all enumerated subdomain and does not contain duplicates
     subdomains_set = set()
-
-    # target to be enumerated
-    target_domain = 'zomato.com'
 
     queue = multiprocessing.Manager().Queue()
 
@@ -46,10 +47,12 @@ if __name__ == '__main__':
 
     write_output(response)
 
-    print(f'{Fore.MAGENTA}Found {subdomains_set.__len__()} subdomains for {target_domain}')
+    # print(f'{Fore.MAGENTA}Found {subdomains_set.__len__()} subdomains for {target_domain}')
+    print_info(f'Found {len(subdomains_set)} subdomains for {target_domain}', fore_color=Fore.WHITE,
+               back_color=Back.GREEN)
     # =========================================================================================
     end_time = time.perf_counter()
-    print('=================================================')
-    print('End of Program')
-    print('=================================================')
-    print(f'Program completed in {end_time - start_time} seconds')
+    print_info('=================================================')
+    print_info('End of Program')
+    print_info(f'Program completed in {end_time - start_time} seconds')
+    print_info('=================================================')

@@ -2,6 +2,7 @@ from multiprocessing import Process
 import requests
 from colorama import Fore
 from bs4 import BeautifulSoup
+from utility.output_helper import *
 
 
 class DNSdumpster(Process):
@@ -20,7 +21,7 @@ class DNSdumpster(Process):
         self.queue = queue
 
     def run(self):
-        print(f'Enumerating subdomains from DNSdumpster')
+        print_info(f'Enumerating subdomains from DNSdumpster')
         self.enumerate_subdomains()
 
     def enumerate_subdomains(self):
@@ -44,7 +45,8 @@ class DNSdumpster(Process):
 
         self.queue.put(subdomains)
 
-        print(f'{Fore.CYAN}Found {subdomains.__len__()} subdomains for {self.target_domain} from DNSdumpster')
+        # print(f'{Fore.CYAN}Found {subdomains.__len__()} subdomains for {self.target_domain} from DNSdumpster')
+        print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from DNSdumpster')
 
     def get_cookies(self):
         resp = self.session.get(self.base_url)

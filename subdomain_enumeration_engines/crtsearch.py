@@ -2,6 +2,7 @@ from multiprocessing import Process
 import requests
 from colorama import Fore
 from bs4 import BeautifulSoup
+from utility.output_helper import *
 
 
 class CrtSearch(Process):
@@ -19,7 +20,8 @@ class CrtSearch(Process):
         self.queue = queue
 
     def run(self):
-        print(f'Enumerating subdomains from CrtSearch')
+        # print(f'Enumerating subdomains from CrtSearch')
+        print_info('Enumerating subdomains from CrtSearch')
         self.enumerate_subdomains()
 
     def enumerate_subdomains(self):
@@ -39,4 +41,5 @@ class CrtSearch(Process):
 
         self.queue.put(subdomains)
 
-        print(f'{Fore.CYAN}Found {subdomains.__len__()} subdomains for {self.target_domain} from CrtSearch')
+        # print(f'{Fore.CYAN}Found {subdomains.__len__()} subdomains for {self.target_domain} from CrtSearch')
+        print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from CrtSearch')

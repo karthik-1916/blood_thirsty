@@ -5,11 +5,13 @@ import threading
 
 import requests
 from threading import Thread
+from utility.output_helper import *
 
 lock = threading.Lock()
 
 
 def extract_subs(queue):
+    print_info('Removing duplicate subdomains')
     subdomains = []
     for q in range(queue.qsize()):
         subs = queue.get()
@@ -48,7 +50,7 @@ def write_list_to_file(list_of_items, filename, path=None):
         if not os.path.exists(path):
             os.mkdir(path)
 
-    print(f'Writing list to file -----> {filepath}')
+    print_info(f'Writing list to file -----> {filepath}')
     file = open(filepath, 'w')
     for item in list_of_items:
         file.write(item + '\n')
@@ -79,6 +81,7 @@ def write_output_to_file(path, filename, contents, filetype='txt'):
 
 
 def make_http_req(urls):
+    print_info('Preparing to make http/https request to subdomains')
     response = []
     session = requests.session()
     threads = []
@@ -91,10 +94,15 @@ def make_http_req(urls):
     for t in threads:
         t.join()
 
+    print_info(f'Completed making http/https request to all subdomains')
+
     return response
 
 
 def req(url, response):
+    lock.acquire()
+    print_info(f'Making request to url -----> {url}')
+    lock.release()
     try:
         resp = requests.get(url=url, timeout=3)
 
@@ -107,10 +115,14 @@ def req(url, response):
         # lock.acquire()
         # print(f'---> {url} -----> Unresponsive')
         # lock.release()
+        lock.acquire()
+        print_error(f'Failed to get response from {url}')
+        lock.release()
         response.append({'Unresponsive': url})
 
 
 def write_output(response):
+    print_info(f'Writing request output to file')
     unresponsive_list = []
     responsive_list = []
 

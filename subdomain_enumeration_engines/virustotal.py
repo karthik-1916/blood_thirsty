@@ -2,6 +2,7 @@ from multiprocessing import Process
 from colorama import Fore
 import json
 import requests
+from utility.output_helper import *
 
 
 class VirusTotal(Process):
@@ -16,7 +17,7 @@ class VirusTotal(Process):
         self.queue = queue
 
     def run(self):
-        print(f'{Fore.CYAN}Enumerating subdomains from VirusTotal')
+        print_info(f'Enumerating subdomains from VirusTotal')
         self.enumerate_subdomains()
 
     def enumerate_subdomains(self):
@@ -27,4 +28,5 @@ class VirusTotal(Process):
 
         self.queue.put(subdomains)
 
-        print(f'{Fore.CYAN}Found {len(resp["subdomains"])} subdomains for {self.target_domain} from VirusTotal')
+        # print(f'{Fore.CYAN}Found {len(resp["subdomains"])} subdomains for {self.target_domain} from VirusTotal')
+        print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from VirusTotal')
