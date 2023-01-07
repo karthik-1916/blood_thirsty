@@ -83,7 +83,6 @@ def write_output_to_file(path, filename, contents, filetype='txt'):
 def make_http_req(urls):
     print_info('Preparing to make http/https request to subdomains')
     response = []
-    session = requests.session()
     threads = []
     for url in urls:
         url = 'https://' + url
@@ -101,22 +100,18 @@ def make_http_req(urls):
 
 def req(url, response):
     lock.acquire()
-    print_info(f'Making request to url -----> {url}')
+    # print_info(f'Making request to url -----> {url}')
     lock.release()
     try:
         resp = requests.get(url=url, timeout=3)
 
         response.append(
             {'Link': url, 'Status Code': resp.status_code, 'Response Text': resp.text, 'Request Header': resp.headers})
-        # lock.acquire()
-        # print(f'---> {url} -----> {resp.status_code}')
-        # lock.release()
+
     except:
-        # lock.acquire()
-        # print(f'---> {url} -----> Unresponsive')
-        # lock.release()
+
         lock.acquire()
-        print_error(f'Failed to get response from {url}')
+        # print_error(f'Failed to get response from {url}')
         lock.release()
         response.append({'Unresponsive': url})
 

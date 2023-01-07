@@ -1,6 +1,5 @@
 from multiprocessing import Process
 import requests
-from colorama import Fore
 from bs4 import BeautifulSoup
 from utility.output_helper import *
 
@@ -36,16 +35,10 @@ class DNSdumpster(Process):
         trs = soup.find_all('table')[3].find_all_next('tr')
         subdomains = []
         for tr in trs:
-            # print(td.get_text())
-            # print(tr.find_next('td').get_text())
             subdomains.append(tr.find_next('td').get_text().split('\n')[0])
-
-        # for sub in subdomains:
-        #     print(sub)
 
         self.queue.put(subdomains)
 
-        # print(f'{Fore.CYAN}Found {subdomains.__len__()} subdomains for {self.target_domain} from DNSdumpster')
         print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from DNSdumpster')
 
     def get_cookies(self):
