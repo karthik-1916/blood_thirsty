@@ -1,5 +1,4 @@
 from multiprocessing import Process
-from colorama import Fore
 import json
 import requests
 from utility.output_helper import *
@@ -23,8 +22,6 @@ class VirusTotal(Process):
     def enumerate_subdomains(self):
         resp = json.loads(self.session.get(url=self.api_url, params=self.params).text)
         subdomains = resp['subdomains']
-        # for subdomain in resp['subdomains']:
-        #     print(Fore.GREEN + subdomain)
 
         self.queue.put(subdomains)
 
