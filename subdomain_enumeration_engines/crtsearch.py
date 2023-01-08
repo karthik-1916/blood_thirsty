@@ -2,6 +2,7 @@ from multiprocessing import Process
 import requests
 from bs4 import BeautifulSoup
 from utility.output_helper import *
+import json
 
 
 class CrtSearch(Process):
@@ -14,7 +15,7 @@ class CrtSearch(Process):
         super().__init__()
         self.target_domain = target_domain
         self.base_url = 'https://crt.sh/'
-        self.params = {'q': target_domain}
+        self.params = {'q': target_domain, 'output': 'json'}
         self.session = requests.session()
         self.queue = queue
 
@@ -26,13 +27,13 @@ class CrtSearch(Process):
         """
         This method will return list of subdomains
         """
-        resp = self.session.get(url=self.base_url, params=self.params)
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        subdomain_length = len(soup.find_all('table')[1].find_all_next('tr'))
-        subdomains = []
-        for i in range(1, subdomain_length):
-            sub = soup.find_all('table')[1].find_all_next('tr')[i].find_all_next('td')[4].get_text()
-            subdomains.append(sub)
+        subs_json = self.session.get(url=self.base_url, params=self.params).json()
+
+        # soup = BeautifulSoup(resp.text, 'html.parser')
+        subdomains = set()
+        for subs in subs_json:
+            sub = subs['name_value']
+            subdomains.add(sub)
 
         self.queue.put(subdomains)
 

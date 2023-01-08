@@ -17,7 +17,8 @@ def extract_subs(queue):
         subs = queue.get()
         for sub in subs:
             if '*' not in sub:
-                subdomains.append(sub)
+                if 'www' not in sub:
+                    subdomains.append(sub)
 
     return subdomains
 

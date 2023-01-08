@@ -33,9 +33,9 @@ class DNSdumpster(Process):
         resp_text = resp.text
         soup = BeautifulSoup(resp_text, 'html.parser')
         trs = soup.find_all('table')[3].find_all_next('tr')
-        subdomains = []
+        subdomains = set()
         for tr in trs:
-            subdomains.append(tr.find_next('td').get_text().split('\n')[0])
+            subdomains.add(tr.find_next('td').get_text().split('\n')[0])
 
         self.queue.put(subdomains)
 

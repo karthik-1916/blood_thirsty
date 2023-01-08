@@ -28,6 +28,8 @@ if __name__ == '__main__':
     # List of sources from where the subdomains will be enumerated
     enum_engines = [VirusTotal, CrtSearch, DNSdumpster]
 
+    # enum_engines = [CrtSearch]
+
     enum_engine_objects = [engine(target_domain, queue) for engine in enum_engines]
 
     # run processes
@@ -47,12 +49,10 @@ if __name__ == '__main__':
 
     write_output(response)
 
-    # print(f'{Fore.MAGENTA}Found {subdomains_set.__len__()} subdomains for {target_domain}')
-    print_info(f'Found {len(subdomains_set)} subdomains for {target_domain}', fore_color=Fore.WHITE,
-               back_color=Back.GREEN)
     # =========================================================================================
     end_time = time.perf_counter()
     print_info('=================================================')
-    print_info('End of Program')
+    print_info(f'Found {len(subdomains_set)} unique subdomains for {target_domain}', fore_color=Fore.WHITE,
+               back_color=Back.GREEN)
     print_info(f'Program completed in {end_time - start_time} seconds')
     print_info('=================================================')
