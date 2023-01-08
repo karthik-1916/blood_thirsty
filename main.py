@@ -1,3 +1,4 @@
+#! /usr/bin/python
 import multiprocessing
 import time
 from subdomain_enumeration_engines.virustotal import VirusTotal
