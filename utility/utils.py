@@ -100,9 +100,7 @@ def make_http_req(urls):
 
 
 def req(url, response):
-    lock.acquire()
-    # print_info(f'Making request to url -----> {url}')
-    lock.release()
+
     try:
         resp = requests.get(url=url, timeout=3)
 
@@ -111,9 +109,6 @@ def req(url, response):
 
     except:
 
-        lock.acquire()
-        # print_error(f'Failed to get response from {url}')
-        lock.release()
         response.append({'Unresponsive': url})
 
 
