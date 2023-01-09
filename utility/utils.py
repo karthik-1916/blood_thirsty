@@ -77,7 +77,7 @@ def write_output_to_file(path, filename, contents, filetype='txt'):
 
     file = open(filepath, 'w', encoding='utf-8')
 
-    file.write(contents)
+    file.writelines(contents)
     file.close()
 
 
@@ -100,7 +100,6 @@ def make_http_req(urls):
 
 
 def req(url, response):
-
     try:
         resp = requests.get(url=url, timeout=3)
 
@@ -135,12 +134,14 @@ def write_output(response):
     # this for loop will write response data to a file
     resp_data_text_thread = []
     req_header_thread = []
+    path = os.path.join(os.getcwd(), 'responsive')
     for resp in response:
-        if not "Unresponsive" in resp.keys():
-            path = os.path.join(os.getcwd(), 'responsive', str(resp['Status Code']), resp['Link'].split('/')[2])
-            t1 = Thread(target=write_output_to_file, args=(path, 'response_data.txt', resp['Response Text']))
+        if "Unresponsive" not in resp.keys():
+            t1 = Thread(target=write_output_to_file,
+                        args=(path, resp["Link"].strip("https://"), resp['Response Text'], 'body'))
             t2 = Thread(target=write_output_to_file,
-                        args=(path, 'response_header', str(resp['Request Header']), 'json'))
+                        args=(path, resp["Link"].strip("https://"),
+                              json.dumps(dict(resp['Request Header']), indent=4, separators=(",", ":")), 'json'))
             resp_data_text_thread.append(t1)
             req_header_thread.append(t2)
             t1.start()
