@@ -6,7 +6,7 @@ from utility.output_helper import *
 
 class DNSdumpster(Process):
 
-    def __init__(self, target_domain, queue=None):
+    def __init__(self, target_domain,args, queue=None):
         """
         Get subdomains from DNSdumpster
         :param target_domain: Target domain to enumerate subdomain
@@ -18,9 +18,10 @@ class DNSdumpster(Process):
         self.session = requests.session()
         self.header = {'Referer': 'https://dnsdumpster.com/'}
         self.queue = queue
+        self.args = args
 
     def run(self):
-        print_info(f'Enumerating subdomains from DNSdumpster')
+        print_info(f'Enumerating subdomains from DNSdumpster',silent=self.args.silent)
         self.enumerate_subdomains()
 
     def enumerate_subdomains(self):
@@ -39,7 +40,7 @@ class DNSdumpster(Process):
 
         self.queue.put(subdomains)
 
-        print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from DNSdumpster')
+        print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from DNSdumpster',silent=self.args.silent)
 
     def get_cookies(self):
         resp = self.session.get(self.base_url)

@@ -5,7 +5,7 @@ from utility.output_helper import *
 
 
 class VirusTotal(Process):
-    def __init__(self, target_domain, queue):
+    def __init__(self, target_domain,args, queue):
         super().__init__()
         self.target_domain = target_domain
         self.base_url = ''
@@ -14,9 +14,10 @@ class VirusTotal(Process):
         self.params = {'apikey': self.api_key, 'domain': self.target_domain}
         self.session = requests.session()
         self.queue = queue
+        self.args = args
 
     def run(self):
-        print_info(f'Enumerating subdomains from VirusTotal')
+        print_info(f'Enumerating subdomains from VirusTotal',silent=self.args.silent)
         self.enumerate_subdomains()
 
     def enumerate_subdomains(self):
@@ -26,4 +27,4 @@ class VirusTotal(Process):
         self.queue.put(subdomains)
 
         # print(f'{Fore.CYAN}Found {len(resp["subdomains"])} subdomains for {self.target_domain} from VirusTotal')
-        print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from VirusTotal')
+        print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from VirusTotal', silent=self.args.silent)

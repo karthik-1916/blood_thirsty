@@ -6,7 +6,7 @@ import json
 
 
 class CrtSearch(Process):
-    def __init__(self, target_domain, queue=None):
+    def __init__(self, target_domain, args, queue=None):
         """
         Get subdomains from CrtSearch
         :param target_domain: Target domain to enumerate subdomain
@@ -18,23 +18,30 @@ class CrtSearch(Process):
         self.params = {'q': target_domain, 'output': 'json'}
         self.session = requests.session()
         self.queue = queue
+        self.args = args
 
     def run(self):
-        print_info('Enumerating subdomains from CrtSearch')
+        print_info('Enumerating subdomains from CrtSearch', silent=self.args.silent)
         self.enumerate_subdomains()
 
     def enumerate_subdomains(self):
         """
         This method will return list of subdomains
         """
-        subs_json = self.session.get(url=self.base_url, params=self.params).json()
+        try:
 
-        # soup = BeautifulSoup(resp.text, 'html.parser')
-        subdomains = set()
-        for subs in subs_json:
-            sub = subs['name_value']
-            subdomains.add(sub)
+            subs_json = self.session.get(url=self.base_url, params=self.params).json()
 
-        self.queue.put(subdomains)
+            # soup = BeautifulSoup(resp.text, 'html.parser')
+            subdomains = set()
+            for subs in subs_json:
+                sub = subs['name_value']
+                subdomains.add(sub)
 
-        print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from CrtSearch')
+            self.queue.put(subdomains)
+
+            print_info(f'Found {len(subdomains)} subdomains for {self.target_domain} from CrtSearch',
+                       silent=self.args.silent)
+
+        except:
+            print_error(f'Error while getting subdomains from CrtSearch')
