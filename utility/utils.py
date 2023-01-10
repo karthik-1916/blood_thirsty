@@ -126,10 +126,11 @@ def write_output(response):
             responsive_list.append(resp_link)
 
     # These two thread will write list of unresponsive and responsive subdomains to a file
+    
     unresp_subs_thread = Thread(target=write_list_to_file,
-                                args=(unresponsive_list, 'unresponsive_subs.txt', os.getcwd() + '\\unresponsive'))
+                                args=(unresponsive_list, 'unresponsive_subs.txt',os.path.join(os.getcwd(),'unresponsive')))
     resp_subs_thread = Thread(target=write_list_to_file,
-                              args=(responsive_list, 'responsive_subs.txt', os.getcwd() + '\\responsive'))
+                              args=(responsive_list, 'responsive_subs.txt',os.path.join(os.getcwd(),'responsive')))
 
     # this for loop will write response data to a file
     resp_data_text_thread = []

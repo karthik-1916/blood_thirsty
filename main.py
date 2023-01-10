@@ -4,6 +4,7 @@ import time
 from subdomain_enumeration_engines.virustotal import VirusTotal
 from subdomain_enumeration_engines.dnsdumpster import DNSdumpster
 from subdomain_enumeration_engines.crtsearch import CrtSearch
+from subdomain_enumeration_engines.rapiddns import RapidDNS
 from utility.utils import *
 from utility.output_helper import *
 
@@ -27,7 +28,7 @@ if __name__ == '__main__':
     queue = multiprocessing.Manager().Queue()
 
     # List of sources from where the subdomains will be enumerated
-    enum_engines = [VirusTotal, CrtSearch, DNSdumpster]
+    enum_engines = [VirusTotal, CrtSearch, DNSdumpster, RapidDNS]
 
     # enum_engines = [CrtSearch]
 
